@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PatientAppointment.Domain
 {
-    public class Paitent
+    public class Patient
     {
         public int Id { get; set; }
         public string FullName { get; set; }

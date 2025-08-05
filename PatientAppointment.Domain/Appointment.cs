@@ -14,7 +14,7 @@ namespace PatientAppointment.Domain
         public AppointmentType AppointmentType { get; set; }
         public AppointmentStatus AppointmentStatus { get; set; }
 
-        public int PaitentId { get; set; }
-        public Paitent Paitent { get; set; }
+        public int PatientId { get; set; }
+        public Patient Patient { get; set; }
     }
 }
