@@ -18,5 +18,43 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+
+
+.navbar {
+    background-color: white !important;
+/*    border-radius: 12px;*/
+    padding: 1rem;
+}
+
+.btn-primary
+ {
+    background-color: #D3378A !important;
+    border-color: #D3378A !important;
+    color: white !important;
+}
+
+    .btn:hover {
+        background-color: #b82870 !important;
+        border-color: #b82870 !important;
+    }
+.btn-outline-primary {
+    color: #D3378A;
+    border: 1px solid #D3378A;
+    background-color: white;
+}
+
+    .btn-outline-primary:hover,
+    .btn-outline-primary:focus {
+        background-color: #D3378A;
+        color: white;
+        border-color: #D3378A;
+    }
+
+.card {
+    background-color: #F5F5F8;
+    backdrop-filter: blur(5px);
+    border-radius : 15px;
 }

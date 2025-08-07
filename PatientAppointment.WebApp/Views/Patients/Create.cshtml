@@ -1,0 +1,68 @@
+﻿@model PatientAppointment.WebApp.Models.PatientViewModel
+
+@{
+    ViewData["Title"] = "Create New Patient";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card create-card justify-content-center">
+            <div class="mt-4 m-3">
+                <h2 class="card-title">@ViewData["Title"]</h2>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="FullName" class="form-control" placeholder="Full Name" />
+                        <label asp-for="FullName"></label>
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Address" class="form-control" placeholder="Address" />
+                        <label asp-for="Address"></label>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Phone" class="form-control" placeholder="Phone" />
+                        <label asp-for="Phone"></label>
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Gender" class="form-control" placeholder="Gender" />
+                        <label asp-for="Gender"></label>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="BirthDate" type="text" class="form-control" placeholder="Birth Date" onfocus="this.type='date'" onblur="if(!this.value) {this.type='text';}" />
+                        <label asp-for="BirthDate"></label>
+                        <span asp-validation-for="BirthDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Country" class="form-control" placeholder="Country" />
+                        <label asp-for="Country"></label>
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3 mt-3">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
