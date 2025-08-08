@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+﻿    using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using PatientAppointment.Application.Interfaces;
 using PatientAppointment.Domain;
@@ -118,6 +118,39 @@ namespace PatientAppointment.Infrastructure
                 command.ExecuteNonQuery();
 
             }
+        }
+
+        public Patient GetByPhone(string phone)
+        {
+            Patient patient = null;
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                string sql = "SELECT Id, FullName, Address, Phone, Gender, BirthDate, Country FROM Patients WHERE phone = @phone";
+                SqlCommand command = new SqlCommand(sql, conn);
+                command.Parameters.AddWithValue("@phone", phone);
+
+                conn.Open();
+
+                using(SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        patient = new Patient
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            FullName = reader["FullName"].ToString(),
+                            Address = reader["Address"].ToString(),
+                            BirthDate = Convert.ToDateTime(reader["BirthDate"]),
+                            Country = reader["Country"].ToString(),
+                            Gender = reader["Gender"].ToString(),
+                            Phone = reader["Phone"].ToString()
+                        }; 
+                    }
+                }
+
+            }
+            return patient;
         }
     }
 }

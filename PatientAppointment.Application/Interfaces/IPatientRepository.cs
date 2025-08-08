@@ -14,5 +14,7 @@ namespace PatientAppointment.Application.Interfaces
         void Add(Patient paitent);
         void Update(Patient paitent);
         void Delete(int id);
+
+        Patient GetByPhone(string phone);
     }
 }
