@@ -1,4 +1,5 @@
-﻿@model PatientAppointment.WebApp.Models.PatientViewModel
+﻿
+@model PatientAppointment.WebApp.Models.PatientViewModel
 
 <div class="row justify-content-center">
     <div class="col-md-6">
@@ -7,7 +8,7 @@
                 <h2 class="card-title">@ViewData["Title"]</h2>
             </div>
             <div class="card-body">
-                <form asp-action="@(Model.Id > 0 ? "Edit" : "Create")">
+                <form asp-action="@ViewData["Action"]">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     <input asp-for="Id" type="hidden" />.

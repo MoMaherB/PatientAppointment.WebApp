@@ -21,6 +21,7 @@ namespace PatientAppointment.WebApp.Controllers
         {
             ViewData["Title"] = "Create New Patient";
             ViewData["btn"] = "Create";
+            ViewData["Action"] = "Create";
             return View("PatientForm");
         }
 
@@ -34,7 +35,7 @@ namespace PatientAppointment.WebApp.Controllers
             {
                 ModelState.AddModelError("Phone", "A patient with this phone number already exists.");
             }
-
+            ModelState.Remove(nameof(patientViewModel.Id));
             if (ModelState.IsValid)
             {
                 Patient patient = new Patient
@@ -50,7 +51,10 @@ namespace PatientAppointment.WebApp.Controllers
                 _patientRepository.Add(patient);
                 return RedirectToAction(nameof(Index));
             }
-            return View(patientViewModel);
+            ViewData["Title"] = "Create New Patient";
+            ViewData["btn"] = "Create";
+            ViewData["Action"] = "Create";
+            return View("PatientForm", patientViewModel);
 
         }
 
@@ -74,6 +78,7 @@ namespace PatientAppointment.WebApp.Controllers
 
             ViewData["Title"] = $"Update ({patient.FullName}) Information";
             ViewData["btn"] = "Update";
+            ViewData["Action"] = "Edit";
             return View("PatientForm", patientViewModel);
         }
 
