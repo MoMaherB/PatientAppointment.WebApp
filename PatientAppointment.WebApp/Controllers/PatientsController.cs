@@ -2,6 +2,7 @@
 using PatientAppointment.Application.Interfaces;
 using PatientAppointment.Domain;
 using PatientAppointment.WebApp.Models;
+
 namespace PatientAppointment.WebApp.Controllers
 {
     public class PatientsController : Controller
@@ -116,24 +117,28 @@ namespace PatientAppointment.WebApp.Controllers
             return View(patient);
         }
 
+        //public IActionResult Delete(int Id)
+        //{
+        //    Patient patient = _patientRepository.GetByID(Id);
+        //    if (patient == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(patient);
+
+        //}
+        //[HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
         public IActionResult Delete(int Id)
         {
             Patient patient = _patientRepository.GetByID(Id);
             if (patient == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Patient not found." });
             }
-            return View(patient);
-
-        }
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [HttpDelete]
-        public IActionResult ConfirmDelete(int Id)
-        {
             _patientRepository.Delete(Id);
-            return RedirectToAction(nameof(Index));
-
+            return Json(new { success = true, message = "Patient deleted successfully." });
         }
     }
 }

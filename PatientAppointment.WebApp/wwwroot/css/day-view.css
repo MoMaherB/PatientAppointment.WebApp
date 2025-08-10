@@ -1,0 +1,21 @@
+﻿.time-slot {
+    border: 2px solid #d63384;
+    border-radius: 15px;
+    color: #d63384;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    padding: 15px;
+}
+
+    .time-slot:hover {
+        background-color: #fff0f5;
+    }
+
+    .time-slot.selected {
+        background-color: #d3d3d3;
+        color: black;
+    }
+#dateHeader h4{
+    color: #d63384;
+}

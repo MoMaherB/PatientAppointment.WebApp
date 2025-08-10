@@ -36,10 +36,10 @@ body {
     color: white !important;
 }
 
-    .btn:hover {
+/*    .btn:hover {
         background-color: #b82870 !important;
         border-color: #b82870 !important;
-    }
+    }*/
 .btn-outline-primary {
     color: #D3378A;
     border: 1px solid #D3378A;
@@ -68,4 +68,7 @@ body {
     border-top-right-radius: 1rem !important;
 }
 
-
+tr.fading-out {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}

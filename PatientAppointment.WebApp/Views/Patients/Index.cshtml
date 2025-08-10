@@ -10,6 +10,7 @@
                     <p>
                         <a asp-action="Create" class="btn btn-primary mt-2">Create New</a>
                     </p>
+        <form asp-controller="Patients" asp-action="Delete" id="antiForgeryForm" class="d-none"></form>
                <div class="table-responsive d-none d-md-block">
     <table class="table">
         <thead>
@@ -27,7 +28,7 @@
         <tbody>
                     @foreach (var item in Model)
                     {
-                    <tr>
+                    <tr id="patient-row-@item.Id">
                         <td>@Html.DisplayFor(modelItem => item.Id)</td>
                         <td>@Html.DisplayFor(modelItem => item.FullName)</td>
                         <td>@Html.DisplayFor(modelItem => item.Address)</td>
@@ -37,10 +38,13 @@
                         <td class="d-none d-xl-table-cell">@Html.DisplayFor(modelItem => item.Country)</td>
                         <td>
                             <div class="d-flex flex-wrap gap-2">
-                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary" })
-                                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-secondary" })
-                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger" })
-                            </div>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Details</a>
+                                    @* <a href="#" onclick="deletePatient(@item.Id, event)" class="btn btn-sm btn-outline-danger">Delete</a> *@
+                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-patient-id="@item.Id" data-patient-name="@item.FullName">
+                                        Delete
+                                    </button>
+                                </div>
                         </td>
                     </tr>
                     }
@@ -60,7 +64,7 @@
     </p>
     @foreach (var item in Model)
     {
-                <div class="card mb-3">
+        <div id="patient-card-@item.Id" class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">@item.FullName</h5>
                         <p class="card-text mb-1"><strong>ID:</strong> @item.Id</p>
@@ -72,9 +76,37 @@
                         <div class="d-flex flex-wrap gap-2">
                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Details</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
-                        </div>
+                            @*<a href="#" onclick="deletePatient(@item.Id, event)" class="btn btn-sm btn-outline-danger">Delete</a> *@
+                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-patient-id ="@item.Id" data-patient-name ="@item.FullName">
+                        Delete
+                    </button>
+                </div>
                     </div>
                 </div>
     }
 </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Delete Patient</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the patient <strong id="patientName"></strong> ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="confirmButton" class="btn btn-danger">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+	<script src="~/js/instance-delete.js"></script>
+}
