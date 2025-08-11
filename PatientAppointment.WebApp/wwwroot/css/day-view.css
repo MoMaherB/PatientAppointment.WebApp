@@ -19,3 +19,44 @@
 #dateHeader h4{
     color: #d63384;
 }
+
+
+/* Add these styles to day-view.css */
+
+.time-slot.status-available {
+    border: 2px solid #198754; /* Green border */
+    color: #146c43;
+}
+
+    .time-slot.status-available:hover {
+        background-color: #d1e7dd;
+    }
+
+.time-slot.status-scheduled {
+    background-color: #cce5ff;
+    border-color: #0d6efd;
+    color: #0a58ca;
+    font-weight: bold;
+}
+
+.time-slot.status-arrived {
+    background-color: #d1e7dd;
+    border-color: #198754;
+    color: #146c43;
+    font-weight: bold;
+}
+
+.time-slot.status-completed {
+    background-color: #e2e3e5;
+    border-color: #6c757d;
+    color: #565e64;
+    font-weight: bold;
+}
+
+.time-slot.status-canceled {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+    color: #b02a37;
+    text-decoration: line-through;
+    font-weight: bold;
+}

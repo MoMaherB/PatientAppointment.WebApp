@@ -11,6 +11,7 @@ namespace PatientAppointment.Application.Interfaces
     {
         Appointment GetById(int id);
         IEnumerable<Appointment> GetAll();
+        IEnumerable<Appointment> GetAllByDateWithPatient(DateTime date);
         void Add(Appointment appointment);
         void Update(Appointment appointment);
         void Delete(int id);

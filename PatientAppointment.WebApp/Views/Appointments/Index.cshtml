@@ -1,16 +1,53 @@
-﻿
-    <div class="container">
-        <!-- Date Picker -->
-        <div class="mb-3 d-flex justify-content-between align-items-center">
-            <input type="date" id="datePicker" class="form-control w-auto">
-            <h4 id="dateHeader" class="mb-0"></h4>
-        </div>
+﻿@model IEnumerable<PatientAppointment.Domain.Appointment>
 
-        <!-- Time Slots -->
-        <div class="card">
-        <div id="timeSlots" class="row g-3 m-3"></div>
+@{
+    ViewData["Title"] = "Daily Schedule";
+}
+
+<div class="container">
+    <h2 class="text-center mb-4">@ViewData["Title"]</h2>
+
+    <form asp-action="Index" method="get" class="d-flex justify-content-center mb-4">
+        <input type="date" name="date" value="@ViewData["SelectedDate"]" class="form-control w-auto" onchange="this.form.submit()" />
+    </form>
+
+    <div class="row g-2">
+        @{
+            // C# logic to generate time slots from 8:00 AM to 10:30 PM
+            var startTime = TimeSpan.FromHours(8);
+            var endTime = TimeSpan.FromHours(22.5); // 10:30 PM
+            var interval = TimeSpan.FromMinutes(30);
+
+            for (var time = startTime; time <= endTime; time += interval)
+            {
+                var appointment = Model.FirstOrDefault(a => a.StartDateTime.TimeOfDay == time);
+
+
+                <div class="col-6 col-md-4 col-lg-2">
+                    @if (appointment != null)
+                    {
+                        var status = appointment.AppointmentStatus.ToString().ToLower();
+                        <div class="card time-slot status-@status p-0">
+                            <div class="card-body text-center">
+                                <strong>@appointment.Patient.FullName</strong><br/>
+                                <strong>@time.ToString(@"hh\:mm")</strong><br />
+                                <small>@appointment.AppointmentType</small> <br />
+                                <small>@appointment.AppointmentStatus</small>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card time-slot p-4">
+                            <div class="card-body text-center">
+                                <strong>@time.ToString(@"hh\:mm")</strong><br />
+                                <small class="text-muted">Available</small>
+                                <br />
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        }
     </div>
-    </div>
-@section Scripts {
-	<script src="~/js/day-view.js"></script>
-    }
+</div>

@@ -75,6 +75,46 @@ namespace PatientAppointment.Infrastructure
             }
         }
 
+        public IEnumerable<Appointment> GetAllByDateWithPatient(DateTime date)
+        {
+            var appointments = new List<Appointment>();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                string sql = @"SELECT 
+                           a.Id, a.StartDateTime, a.EndDateTime, a.AppointmentStatus, a.AppointmentType,
+                           p.Id as PatientId, p.FullName
+                       FROM Appointments a
+                       JOIN Patients p ON a.PatientId = p.Id
+                       WHERE CAST(a.StartDateTime AS DATE) = @AppointmentDate";
+
+                var command = new SqlCommand(sql, connection);
+
+                command.Parameters.AddWithValue("@AppointmentDate", date.Date);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        appointments.Add(new Appointment
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            StartDateTime = Convert.ToDateTime(reader["StartDateTime"]),
+                            EndDateTime = Convert.ToDateTime(reader["EndDateTime"]),
+                            AppointmentStatus = (AppointmentStatus)Enum.Parse(typeof(AppointmentStatus), reader["AppointmentStatus"].ToString()),
+                            AppointmentType = (AppointmentType)Enum.Parse(typeof(AppointmentType), reader["AppointmentType"].ToString()),
+                            PatientId = Convert.ToInt32(reader["PatientId"]),
+                            Patient = new Patient
+                            {
+                                Id = Convert.ToInt32(reader["PatientId"]),
+                                FullName = reader["FullName"].ToString()
+                            }
+                        });
+                    }
+                }
+            }
+            return appointments;
+        }
         public Appointment GetById(int id)
         {
             Appointment appointment = null;
@@ -121,5 +161,6 @@ namespace PatientAppointment.Infrastructure
             }
 
         }
+
     }
 }
