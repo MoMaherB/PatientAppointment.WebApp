@@ -117,17 +117,7 @@ namespace PatientAppointment.WebApp.Controllers
             return View(patient);
         }
 
-        //public IActionResult Delete(int Id)
-        //{
-        //    Patient patient = _patientRepository.GetByID(Id);
-        //    if (patient == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(patient);
-
-        //}
-        //[HttpPost, ActionName("Delete")]
+     
         [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult Delete(int Id)

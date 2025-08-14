@@ -25,5 +25,37 @@ namespace PatientAppointment.WebApp.Controllers
 
             return View(bookedAppointments);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateStatus(int Id, AppointmentStatus NewStatus)
+        {
+            Appointment appontiment = _appointmentRepository.GetById(Id);
+            if (appontiment == null)
+            {
+                return Json(new { success = false, message = "appontiment not found." });
+            }
+            appontiment.AppointmentStatus = NewStatus;
+
+            _appointmentRepository.Update(appontiment);
+            return Json(new { success = true, message = "Patient updated successfully." });
+        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public  IActionResult Delete(int Id)
+        //{
+        //    Appointment appontiment = _appointmentRepository.GetById(Id);
+        //    if (appontiment == null)
+        //    {
+        //        return Json(new { success = false, message = "appontiment not found." });
+        //    }
+
+        //    _appointmentRepository.Delete(Id);
+        //    return Json(new { success = true, message = "Patient deleted successfully." });
+
+        //}
+
+        
     }
 }
