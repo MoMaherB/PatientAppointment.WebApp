@@ -1,37 +1,9 @@
-﻿@model IEnumerable<PatientAppointment.Domain.Appointment>
+﻿@model IEnumerable<PatientAppointment.Domain.Appointment>;
 
 @{
     ViewData["Title"] = "Daily Schedule";
 }
-<style>
-    #contextMenu {
-        display: none;
-        position: absolute;
-        background-color: #F5F5F8;
-        min-width: 150px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        z-index: 1000;
-        border-radius: 10px;
-        cursor: pointer;
-        border: 1px solid #d63384;
-    }
 
-        #contextMenu ul {
-            list-style: none;
-            padding: 5px 0;
-            margin: 0;
-        }
-
-        #contextMenu li {
-            transition: all 0.2s ease;
-            padding: 8px 15px;
-            cursor: pointer;
-        }
-
-        #contextMenu li :hover {
-                background-color: green;
-    }
-</style>
 <form asp-action="UpdatStatus" id="antiForgeryForm" class="d-none"></form>
 <div class="container">
     <h2 class="text-center mb-4">@ViewData["Title"]</h2>
@@ -40,7 +12,7 @@
         <input type="date" name="date" value="@ViewData["SelectedDate"]" class="form-control w-auto" onchange="this.form.submit()" />
     </form>
 
-    <div class="row g-2">
+    <div class="row g-2" id="timeSlots">
         @{
             // C# logic to generate time slots from 8:00 AM to 10:30 PM
             var startTime = TimeSpan.FromHours(8);
@@ -51,11 +23,13 @@
             {
                 var appointment = Model.FirstOrDefault(a => a.StartDateTime.TimeOfDay == time);
 
+                DateTime slotDateTime = DateTime.Parse(ViewData["SelectedDate"].ToString()).Add(time);
+
                 <div class="col-6 col-md-4 col-lg-2">
                     @if (appointment != null)
                     {
                         var status = appointment.AppointmentStatus.ToString().ToLower();
-                        <div class="card time-slot time-slot-booked status-@status p-0" data-id="@appointment.Id" id="appointment-card-@appointment.Id" data-status="@status">
+                        <div class="card time-slot time-slot-booked status-@status p-0" data-id="@appointment.Id" id="appointment-card-@appointment.Id" data-status="@status" data-action="edit" data-date-time="@slotDateTime.ToString("o")">
                             <div class="card-body text-center">
                                 <strong>@appointment.Patient.FullName</strong><br/>
                                 <strong>@time.ToString(@"hh\:mm")</strong><br />
@@ -66,21 +40,21 @@
                     }
                     else
                     {
-                        <div class="card time-slot time-slot-available p-4">
+                        <div class="card time-slot time-slot-available p-4" data-action="create" data-date-time="@slotDateTime.ToString("o")">
                             <div class="card-body text-center" >
                                 <strong>@time.ToString(@"hh\:mm")</strong><br />
                                 <small class="text-muted">Available</small>
                                 <br />
-                            </div>
-                        </div>
+                            </div>  
+                         </div>
                     }
                 </div>
             }
         }
     </div>
 </div>
-
-<div id="contextMenu">
+<!-- Right click menu -->
+<div id="contextMenu" class="context-menu">
     <ul>
         <li data-action="updateStatus" data-status="scheduled" id="li-scheduled">Scheduled</li>
         <li data-action="updateStatus" data-status="arrived" id="li-arrived">Arrived</li>
@@ -91,76 +65,23 @@
     </ul>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createModalLabel"></h1>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="createModalBody">
+            </div>
+			<div id="deleteArea" class="modal-footer" hidden>
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" id="submitButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
-    <script>
-        let form = document.getElementById("antiForgeryForm");
-        let token = form.querySelector('input[name="__RequestVerificationToken"]').value;
-        let appointmentCards = document.querySelectorAll('.time-slot-booked');
-		let menu = document.getElementById('contextMenu');
-        let appointmentId;
-        let appointmentStatus;
-        let liStatusDisplay;
-        //
-		appointmentCards.forEach(card => {
-            card.addEventListener('contextmenu', function (event) {
-                event.preventDefault();
-                menu.style.display = "block";
-                menu.style.left = event.pageX + "px";
-                menu.style.top = event.pageY + "px";
-                appointmentId = card.dataset.id;
-
-                // Hide the menu item corresponding to the current appointment status
-                appointmentStatus = card.dataset.status; 
-                liStatusDisplay = document.getElementById(`li-${appointmentStatus}`);
-                liStatusDisplay.hidden = true; 
-
-            })});
-
-           menu.addEventListener('click', function (event) {
-               const action = event.target.dataset.action;
-               if (action === 'updateStatus'){
-
-                  const newStatus = event.target.dataset.status;
-                  const CapitzlizeNewStatus = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
-                  fetch(`/Appointments/UpdateStatus?id=${appointmentId}&?newStatus=${CapitzlizeNewStatus}`, {
-					  method: 'POST',
-                      headers: {
-                          'RequestVerificationToken': token
-                      }
-				  }).then(response => 
-                      {
-                          
-                          console.log(response);
-                          return response.json();
-                      }).then(data => {
-                      if (data.success) {
-						  const appointmentCard = document.getElementById(`appointment-card-${appointmentId}`);
-						  appointmentCard.dataset.status = newStatus;
-						  appointmentCard.querySelector('#appointment-status-txt-' + appointmentId).textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
-						  appointmentCard.className = `card time-slot time-slot-booked status-${newStatus} p-0`;
-					  } else {
-						  console.error("Error updating status: " + data.message);
-                      
-                      }
-                  }).catch(error => {
-                      console.error("Error deleting patient:", error);
-                  })
-
-               }
-
-               if (action === 'delete'){
-                   console.log(event.target.dataset.action);
-               }
-           });
-           
-     
-        
-           
-       
-
-          document.addEventListener("click", function () {
-          menu.style.display = "none";
-		  liStatusDisplay.hidden = false; //Show Li elemnt after context menu is closed.
-        });
-    </script>
+	<script src="~/js/Calendar.js"></script>"
 }

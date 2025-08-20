@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
 using PatientAppointment.Application.Interfaces;
 using PatientAppointment.Domain;
 using PatientAppointment.WebApp.Models;
@@ -37,6 +39,7 @@ namespace PatientAppointment.WebApp.Controllers
                 ModelState.AddModelError("Phone", "A patient with this phone number already exists.");
             }
             ModelState.Remove(nameof(patientViewModel.Id));
+
             if (ModelState.IsValid)
             {
                 Patient patient = new Patient
@@ -52,6 +55,7 @@ namespace PatientAppointment.WebApp.Controllers
                 _patientRepository.Add(patient);
                 return RedirectToAction(nameof(Index));
             }
+           
             ViewData["Title"] = "Create New Patient";
             ViewData["btn"] = "Create";
             ViewData["Action"] = "Create";

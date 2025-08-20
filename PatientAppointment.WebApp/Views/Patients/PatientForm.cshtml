@@ -32,7 +32,10 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input asp-for="Gender" class="form-control" placeholder="Gender" />
+                        <select asp-for="Gender" class="form-control">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
                         <label asp-for="Gender"></label>
                         <span asp-validation-for="Gender" class="text-danger"></span>
                     </div>

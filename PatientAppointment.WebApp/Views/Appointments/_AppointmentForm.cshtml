@@ -1,0 +1,43 @@
+﻿@model PatientAppointment.WebApp.Models.QuickAddViewModel
+
+
+
+
+<form id="quickAddForm" asp-controller="Appointments" asp-action="QuickCreate" method="post">
+
+    <input asp-for="StartDateTime" type="hidden" />
+    <input asp-for="Id" type="hidden" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="PatientId" class="form-label"></label>
+        <select asp-for="PatientId" class="form-control" asp-items="@(ViewData["Patients"] as SelectList)">
+            <option value="">-- Select Patient --</option>
+        </select>
+        <span asp-validation-for="PatientId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="AppointmentType" class="form-label"></label>
+        <select asp-for="AppointmentType" class="form-control" asp-items="Html.GetEnumSelectList<PatientAppointment.Domain.AppointmentType>()">
+            <option value="">-- Select Type --</option>
+        </select>
+        <span asp-validation-for="AppointmentType" class="text-danger"></span>
+    </div>
+    @if (ViewBag.Action == "Update")
+    {
+        <div class="mb-3">
+            <label asp-for="AppointmentStatus" class="form-label"></label>
+            <select asp-for="AppointmentStatus" class="form-control" asp-items="Html.GetEnumSelectList<PatientAppointment.Domain.AppointmentStatus>()">
+                <option value="">-- Select Status --</option>
+            </select>
+            <span asp-validation-for="AppointmentType" class="text-danger"></span>
+        </div>
+    }
+    
+    <div class="mb-3 mt-3">
+        <input type="button" value="@ViewData["btn"]" class="btn btn-primary" id="submitButton"/>
+    </div>
+</form>
+         

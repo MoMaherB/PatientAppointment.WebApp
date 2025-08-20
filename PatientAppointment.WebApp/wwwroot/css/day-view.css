@@ -1,4 +1,33 @@
-﻿.time-slot {
+﻿#contextMenu {
+    display: none;
+    position: absolute;
+    background-color: #F5F5F8;
+    min-width: 150px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1px solid #d63384;
+}
+
+#contextMenu ul {
+        list-style: none;
+        padding: 5px 0;
+        margin: 0;
+    }
+
+#contextMenu li {
+        transition: all 0.2s ease;
+        padding: 8px 15px;
+        cursor: pointer;
+    }
+
+    #contextMenu li:hover {
+        background-color: #e2e3e5;
+    }
+
+
+.time-slot {
     border: 2px solid #d63384;
     border-radius: 15px;
     color: #d63384;
@@ -6,6 +35,8 @@
     transition: all 0.2s ease;
     text-align: center;
     padding: 15px;
+    user-select: none;
+    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
 }
 
     .time-slot:hover {
@@ -20,6 +51,15 @@
     color: #d63384;
 }
 
+.time-slot.is-expanded {
+    /* Make the card pop up above the others */
+    position: relative;
+    z-index: 10;
+    /* Scale the card up to make it larger */
+    transform: scale(1.5);
+    /* Add a stronger shadow to lift it off the page */
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
 
 /* Add these styles to day-view.css */
 
