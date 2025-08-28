@@ -72,3 +72,24 @@ tr.fading-out {
     opacity: 0;
     transition: opacity 0.5s ease-out;
 }
+
+
+.badge.bg-Scheduled {
+    background-color: #cce5ff !important;
+    color: #0a58ca !important;
+}
+
+.badge.bg-Arrived {
+    background-color: #d1e7dd !important;
+    color: #146c43 !important;
+}
+
+.badge.bg-Completed {
+    background-color: #e2e3e5 !important;
+    color: #565e64 !important;
+}
+
+.badge.bg-Canceled {
+    background-color: #f8d7da !important;
+    color: #b02a37 !important;
+}

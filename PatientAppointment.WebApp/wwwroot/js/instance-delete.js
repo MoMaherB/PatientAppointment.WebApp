@@ -12,7 +12,6 @@ var confirmButton = deleteModal.querySelector("#confirmButton");
 confirmButton.onclick = function () {
     var form = document.getElementById("antiForgeryForm");
     var token = form.querySelector('input[name="__RequestVerificationToken"]').value;
-
     fetch(`/Patients/Delete/${patientId}`, {
         method: 'POST',
         headers: {
@@ -21,13 +20,15 @@ confirmButton.onclick = function () {
     }).then(response => response.json())    
         .then(data => {
             if (data.success) {
-                const patientRow = document.getElementById(`patient-row-${patientId}`)
-                const patientCard = document.getElementById(`patient-card-${patientId}`)
+
+                const patientRow = document.getElementById(`patient-row-${patientId}`);
+                const patientCard = document.getElementById(`patient-card-${patientId}`);
                 if (patientRow) {
                     patientRow.classList.add('fading-out');
                     setTimeout(() => {
                         patientRow.remove();
                     }, 500);
+
                 }
                 if (patientCard) {
                     patientCard.classList.add('fading-out');
@@ -35,6 +36,10 @@ confirmButton.onclick = function () {
                         patientCard.remove();
                     }, 500);
                 }
+
+                toastr.success(data.message, 'Success', { "closeButton": true, "progressBar": true, "timeOut": 5000 });
+
+                
 
                 const modalInstance = bootstrap.Modal.getInstance(deleteModal);
                 modalInstance.hide();

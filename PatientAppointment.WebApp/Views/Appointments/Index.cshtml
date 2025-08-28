@@ -31,10 +31,10 @@
                         var status = appointment.AppointmentStatus.ToString().ToLower();
                         <div class="card time-slot time-slot-booked status-@status p-0" data-id="@appointment.Id" id="appointment-card-@appointment.Id" data-status="@status" data-action="edit" data-date-time="@slotDateTime.ToString("o")">
                             <div class="card-body text-center">
-                                <strong>@appointment.Patient.FullName</strong><br/>
-                                <strong>@time.ToString(@"hh\:mm")</strong><br />
-                                <small>@appointment.AppointmentType</small> <br />
-                                <small id="appointment-status-txt-@appointment.Id">@appointment.AppointmentStatus</small>
+                                <strong id="appointment-name-@appointment.Id">@appointment.Patient.FullName</strong><br />
+                                <strong id="appointment-time-@appointment.Id">@time.ToString(@"hh\:mm")</strong><br />
+                                <small id="appointment-type-@appointment.Id">@appointment.AppointmentType</small> <br />
+                                <small id="appointment-status-@appointment.Id">@appointment.AppointmentStatus</small>
                             </div>
                         </div>
                     }

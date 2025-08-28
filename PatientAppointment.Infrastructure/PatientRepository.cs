@@ -1,4 +1,5 @@
-﻿    using Microsoft.Data.SqlClient;
+﻿using System.Text;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using PatientAppointment.Application.Interfaces;
 using PatientAppointment.Domain;
@@ -151,6 +152,72 @@ namespace PatientAppointment.Infrastructure
 
             }
             return patient;
+        }
+
+        public IEnumerable<Patient> Search(string? name, string? phone, DateTime? birthDate, string? gender, string? country)
+        {
+            List<Patient> patients= new List<Patient>();
+            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(phone) &&
+                !birthDate.HasValue && string.IsNullOrEmpty(gender) && string.IsNullOrEmpty(country))
+            {
+                return patients;
+            }
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                StringBuilder sql = new System.Text.StringBuilder("SELECT Id, FullName, Address, Phone, Gender, BirthDate, Country FROM Patients WHERE 1=1");
+                var command = new SqlCommand();
+
+                if (!string.IsNullOrEmpty(name))
+                {
+                    sql.Append(" AND FullName LIKE @Name");
+                    command.Parameters.AddWithValue("@Name", $"%{name}%");
+                }
+                if (!string.IsNullOrEmpty(phone))
+                {
+                    sql.Append(" AND Phone LIKE @Phone");
+                    command.Parameters.AddWithValue("@Phone", $"%{phone}%");
+                }
+                if (birthDate.HasValue)
+                {
+                    sql.Append(" AND CAST(BirthDate AS DATE) = @BirthDate");
+                    command.Parameters.AddWithValue("@BirthDate", birthDate.Value.Date);
+                }
+                if (!string.IsNullOrEmpty(gender))
+                {
+                    sql.Append(" AND Gender = @Gender");
+                    command.Parameters.AddWithValue("@Gender", gender);
+                }
+                if (!string.IsNullOrEmpty(country))
+                {
+                    sql.Append(" AND Country LIKE @Country");
+                    command.Parameters.AddWithValue("@Country", $"%{country}%");
+                }
+
+                command.Connection = connection;
+                command.CommandText = sql.ToString();
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        patients.Add(new Patient
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            FullName = reader["FullName"].ToString(),
+                            Address = reader["Address"].ToString(),
+                            Phone = reader["Phone"].ToString(),
+                            Gender = reader["Gender"].ToString(),
+                            BirthDate = Convert.ToDateTime(reader["BirthDate"]),
+                            Country = reader["Country"].ToString()
+                        });
+                    }
+                }
+            }
+     
+
+            return patients;
         }
     }
 }

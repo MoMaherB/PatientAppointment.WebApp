@@ -143,6 +143,35 @@ namespace PatientAppointment.Infrastructure
             return appointment;
         }
 
+        public IEnumerable<Appointment> GetByPatientId(int pid)
+        {
+            var appointments = new List<Appointment>();
+            
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string sql = "SELECT Id, PatientId, StartDateTime, EndDateTime, AppointmentType, AppointmentStatus FROM Appointments WHERE PatientId = @PatientId";
+                SqlCommand command = new SqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@PatientId", pid);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        appointments.Add( new Appointment
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            PatientId = Convert.ToInt32(reader["PatientId"]),
+                            StartDateTime = Convert.ToDateTime(reader["StartDateTime"]),
+                            EndDateTime = Convert.ToDateTime(reader["EndDateTime"]),
+                            AppointmentType = (AppointmentType)Enum.Parse(typeof(AppointmentType), reader["AppointmentType"].ToString()),
+                            AppointmentStatus = (AppointmentStatus)Enum.Parse(typeof(AppointmentStatus), reader["AppointmentStatus"].ToString())
+                        });
+                    }
+                }
+            }
+            return appointments;
+        }
+
         public void Update(Appointment appointment)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))

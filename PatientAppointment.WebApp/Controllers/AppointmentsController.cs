@@ -19,7 +19,7 @@ namespace PatientAppointment.WebApp.Controllers
         public IActionResult Index(DateTime? date)
         {
             DateTime selectedDate = date ?? DateTime.Today;
-          
+
             List<Appointment> bookedAppointments = _appointmentRepository.GetAllByDateWithPatient(selectedDate).ToList();
 
             ViewData["SelectedDate"] = selectedDate.ToString("yyyy-MM-dd");
@@ -40,13 +40,13 @@ namespace PatientAppointment.WebApp.Controllers
             return PartialView("_AppointmentForm", new QuickAddViewModel());
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public IActionResult QuickCreate([FromBody]QuickAddViewModel quickAddViewModel)
+        public IActionResult QuickCreate([FromBody] QuickAddViewModel quickAddViewModel)
         {
-          
+
             if (ModelState.IsValid)
             {
                 Appointment appointment = new Appointment
@@ -64,7 +64,7 @@ namespace PatientAppointment.WebApp.Controllers
 
 
             }
-            return Json(new { success = false});
+            return Json(new { success = false });
 
         }
 
@@ -111,7 +111,7 @@ namespace PatientAppointment.WebApp.Controllers
                 };
 
                 _appointmentRepository.Update(appointment);
-                return Json(new { success = true, message = "Patient created successfully." });
+                return Json(new { success = true, message = "Patient updated successfully." });
 
 
             }
@@ -131,7 +131,7 @@ namespace PatientAppointment.WebApp.Controllers
             appontiment.AppointmentStatus = NewStatus;
 
             _appointmentRepository.Update(appontiment);
-            return Json(new { success = true, message = "Patient updated successfully." });
+            return Json(new { success = true, message = "Status updated successfully." });
         }
 
         [HttpPost]
@@ -149,6 +149,32 @@ namespace PatientAppointment.WebApp.Controllers
 
         }
 
+        public IActionResult FindPatients()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult FindPatients(SerachViewModel serachViewModel)
+        {
+            string? name = serachViewModel.FullName;
+            string? phone = serachViewModel.Phone;
+            DateTime? birthDate = serachViewModel.BirthDate != default ? serachViewModel.BirthDate : null;
+            string gender = serachViewModel.Gender;
+            string? country = serachViewModel.Country;
+
+            List<Patient> searchResultPatients = _patientRepository.Search(name, phone, birthDate, gender, country).ToList();
+            serachViewModel.SearchResultPatients = searchResultPatients;
+            return View(serachViewModel);
+        }
+
+        public IActionResult PatientAppointments(int pid)
+        {
+            Patient patient = _patientRepository.GetByID(pid);
+            List<Appointment> PatientAppointments = _appointmentRepository.GetByPatientId(pid).ToList();
+            ViewData["patient"] = patient;
+            return View(PatientAppointments);
+        }
     }
 }

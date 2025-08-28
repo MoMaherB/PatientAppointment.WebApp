@@ -1,0 +1,55 @@
+﻿@model List<PatientAppointment.Domain.Appointment>
+
+<div class="card mt-4" id="appointmentResultsCard">
+    <div class="card-body mt-4">
+        <h2 class="card-title mb-0"><i class="fas fa-calendar-alt me-2"></i>Appointments for: <span class="text-primary" id="selectedPatientName">@ViewBag.patient.FullName</span></h2>
+
+        <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-primary"><i class="fas fa-plus me-2"></i>Add New Appointment</button>
+        </div>
+
+        <!-- List of existing appointments -->
+        @if (Model != null)
+        {
+        <ul class="list-group">
+            @foreach (var appointment in Model)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                    <h6 class="mb-1">@appointment.AppointmentType</h6>
+                    <p class="mb-1 text-muted">@appointment.StartDateTime</p>
+                            <span class="badge bg-@appointment.AppointmentStatus">@appointment.AppointmentStatus</span>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-primary" data-action="edit" data-appointment-id="@appointment.Id"><i class="fas fa-edit" ></i> Edit</button>
+                            <button class="btn btn-sm btn-outline-danger" data-action="delete" data-appointment-id="@appointment.Id"><i class="fas fa-trash"></i> Delete</button>
+                </div>
+            </li>
+            }
+        </ul>
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        const appointmentResultsCard = document.getElementById('appointmentResultsCard')
+        appointmentResultsCard.addEventListener('click', function(event){
+            event.preventDefault();
+            const btn = event.target;
+            const action = btn.dataset.action;
+
+            if (action === 'edit')
+            {
+                const appointmentId = btn.dataset.appointmentId;
+                console.log(appointmentId);
+            }
+            if (action === 'delete')
+            {
+                const appointmentId = btn.dataset.appointmentId;
+                console.log(appointmentId);
+            }
+        })
+    </script>
+}

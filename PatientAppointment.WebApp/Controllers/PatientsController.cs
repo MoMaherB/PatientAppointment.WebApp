@@ -53,7 +53,8 @@ namespace PatientAppointment.WebApp.Controllers
                 };
 
                 _patientRepository.Add(patient);
-                return RedirectToAction(nameof(Index));
+                TempData["success"] = "Patient created successfully.";
+                return RedirectToAction("Index");
             }
            
             ViewData["Title"] = "Create New Patient";
@@ -105,6 +106,7 @@ namespace PatientAppointment.WebApp.Controllers
                 };
 
                 _patientRepository.Update(patient);
+                TempData["success"] = "Patient updated successfully.";
                 return RedirectToAction(nameof(Index));
             }
             return View("PatientForm", patientViewModel);

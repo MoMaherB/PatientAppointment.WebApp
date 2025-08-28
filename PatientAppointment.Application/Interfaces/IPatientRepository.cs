@@ -16,5 +16,8 @@ namespace PatientAppointment.Application.Interfaces
         void Delete(int id);
 
         Patient GetByPhone(string phone);
+
+        IEnumerable<Patient> Search(string? name, string? phone, DateTime? birthDate, string? gender, string? country);
+
     }
 }
