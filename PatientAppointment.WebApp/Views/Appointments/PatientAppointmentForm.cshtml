@@ -1,0 +1,197 @@
+﻿    <style>
+        .time-slot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.75rem;
+        }
+        .time-slot {
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            background-color: white;
+            transition: all 0.2s ease-in-out;
+        }
+        .time-slot.available:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+        }
+        .time-slot.booked {
+            background-color: #f8d7da;
+            color: #842029;
+            border-color: #f5c2c7;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .time-slot.selected {
+            background-color: #0d6efd;
+            color: white;
+            border-color: #0d6efd;
+            transform: scale(1.05);
+        }
+        .selection-card {
+            cursor: pointer;
+            border-width: 2px;
+        }
+
+
+        .selection-card.active {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+    </style>
+
+@model PatientAppointment.WebApp.Models.QuickAddViewModel
+
+        <div class="card">
+
+            <div class="card-body">
+        <h2 class="mb-4">Create Appointment for: <a asp-controller="Patients" asp-action="Details" asp-route-id="@ViewBag.patient.Id" style="text-decoration: none;">@ViewBag.patient.FullName</a></h2>
+
+        <form asp-action="AddPatientAppointment">
+                    <!-- Hidden field for the patient ID -->
+                    <input type="hidden" name="patientId" value="@ViewBag.patient.Id">
+                    <input type="hidden" name="AppointmentType" value="NewPatient">
+			        <input type="hidden" name="StartDateTime">
+			        <input type="hidden" name="AppointmentStatus" value="Scheduled">
+
+                    
+
+                    <!-- 1. Date and Time Selection -->
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                              <h5 class="mb-3">1. Select Date & Time</h5>
+                              <br />
+                            <label for="appointmentDate" class="form-label">Appointment Date</label>
+                            <input type="date" class="form-control" id="appointmentDate">
+                    <div id="date-error">
+                            @if (ViewData["ErrorMessage"] != null)
+                    {
+                        <br />
+                        <div class="alert alert-danger" role="alert">
+                            @ViewData["ErrorMessage"]
+                        </div>
+                    }
+                    </div>
+                        </div>
+                        <div class="col-md-8 align-content-center" id="available-time">
+                    <div class="card text-center" id="date-time-container">
+                                <div class="card-body">
+                            <h5 style="color: #d63384;">Choose date to find your appointment</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- 2. Appointment Type Selection -->
+                    <h5 class="mb-3">2. Select Appointment Type</h5>
+                    <div class="row justify-content-end">
+                        <div class="col-md-8">
+                            <div class="row justify-content-end">
+                                <div class="col-md-4">
+                            <div class="card selection-card text-center active" value="NewPatient">
+                                        <div class="card-body">
+                                            <i class="fas fa-user-plus fa-2x mb-2 text-primary"></i>
+                                            <p class="card-text fw-bold">New Patient</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                            <div class="card selection-card text-center" value="FollowUp">
+                                        <div class="card-body">
+                                            <i class="fas fa-notes-medical fa-2x mb-2 text-success"></i>
+                                            <p class="card-text fw-bold">Follow-Up</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                            <div class="card selection-card text-center" value="Consultant">
+                                        <div class="card-body">
+                                            <i class="fas fa-user-md fa-2x mb-2 text-warning"></i>
+                                            <p class="card-text fw-bold">Consultant</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  
+
+                        </div>
+                    </div>
+                   
+
+                    <hr class="my-4">
+
+                    <!-- 3. Submit Button -->
+                    <div class="d-flex justify-content-end">
+                        <a asp-action="PatientAppointments" asp-route-pid="@Model.Id" class="btn btn-secondary me-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary" id="save-appointment">Save Appointment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+ 
+
+@section Scripts {
+    <script>
+        const availableTimeSection = document.getElementById("available-time");
+		const appointmentDate = document.getElementById("appointmentDate");
+        let chooenDate;
+		appointmentDate.addEventListener("change", function(){
+
+            const dateError = document.getElementById('date-error');
+            dateError.innerText= "";
+			chooenDate = this.value;
+
+            fetch(`/Appointments/ShowAvailableSlots/?date=${chooenDate}`, {
+                method: 'GET'
+            }).then(response => response.text()).then(data => {
+                console.log(data);
+                availableTimeSection.innerHTML = data;
+			}).catch(error => console.error('Error fetching available slots:', error));
+           
+        });
+
+        //Apointment selection date time slot logic
+
+		document.addEventListener('click', function (event) {
+			const target = event.target;
+			// Check if the clicked element is a time slot
+			if (target.classList.contains('time-slot') && target.classList.contains('available')) {
+				// Deselect any previously selected time slot
+				const previouslySelected = document.querySelector('.time-slot.selected');
+				if (previouslySelected) {
+					previouslySelected.classList.remove('selected');
+				}
+				// Select the clicked time slot
+				target.classList.add('selected');
+				// Optionally, you can store the selected time slot's data for form submission
+				const selectedDateTime = target.getAttribute('data-date-time');
+				console.log('Selected Date and Time:', selectedDateTime);
+				// Update the hidden input field with the selected date and time
+				document.querySelector('input[name="StartDateTime"]').value = selectedDateTime;
+			}
+            const appointmentCard = event.target.closest('.selection-card');
+            if (appointmentCard) {
+                const previouslySelectedAppointment = document.querySelector('.selection-card.active');
+                if (previouslySelectedAppointment) {
+                    previouslySelectedAppointment.classList.remove('active');
+                }
+
+                appointmentCard.classList.add('active');
+
+                const selectedAppointmentType = appointmentCard.getAttribute('value');
+                console.log(selectedAppointmentType);
+				document.querySelector('input[name="AppointmentType"]').value = selectedAppointmentType;
+
+            }
+		});
+
+        
+
+      
+        
+    </script>
+
+}

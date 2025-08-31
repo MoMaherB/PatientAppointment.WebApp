@@ -172,9 +172,60 @@ namespace PatientAppointment.WebApp.Controllers
         public IActionResult PatientAppointments(int pid)
         {
             Patient patient = _patientRepository.GetByID(pid);
-            List<Appointment> PatientAppointments = _appointmentRepository.GetByPatientId(pid).ToList();
+            List<Appointment> patientAppointments = _appointmentRepository.GetByPatientId(pid).ToList();
+            patientAppointments = patientAppointments.OrderByDescending(a => a.StartDateTime).ToList();
+
             ViewData["patient"] = patient;
-            return View(PatientAppointments);
+
+            return View(patientAppointments);
         }
+
+        public IActionResult AddPatientAppointment(int pid)
+        {
+            Patient patient = _patientRepository.GetByID(pid);
+            ViewData["patient"] = patient;
+            return View("PatientAppointmentForm", new QuickAddViewModel()) ;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddPatientAppointment(QuickAddViewModel quickAddViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                Appointment appointment = new Appointment
+                {
+                    PatientId = quickAddViewModel.PatientId,
+                    AppointmentType = quickAddViewModel.AppointmentType,
+                    StartDateTime = quickAddViewModel.StartDateTime,
+                    EndDateTime = quickAddViewModel.StartDateTime.AddMinutes(30),
+                    AppointmentStatus = AppointmentStatus.Scheduled
+                };
+                _appointmentRepository.Add(appointment);
+                TempData["success"] = "Appointment created successfully.";
+                return RedirectToAction("PatientAppointments", new { pid = quickAddViewModel.PatientId });
+            }
+            Patient patient = _patientRepository.GetByID(quickAddViewModel.PatientId);
+            ViewData["patient"] = patient;
+            ViewData["ErrorMessage"] = "Please select an appointment date.";
+            return View("PatientAppointmentForm", quickAddViewModel);
+
+        }
+
+
+
+        public IActionResult ShowAvailableSlots(DateTime? date)
+        {
+
+            DateTime selectedDate = date ?? DateTime.Today;
+
+            List<Appointment> bookedAppointments = _appointmentRepository.GetAllByDateWithPatient(selectedDate).ToList();
+
+            ViewData["SelectedDate"] = selectedDate.ToString("yyyy-MM-dd");
+
+            return PartialView("_ShowAvailableSlots", bookedAppointments);
+        }
+
+
     }
 }

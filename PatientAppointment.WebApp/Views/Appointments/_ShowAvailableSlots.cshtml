@@ -1,0 +1,30 @@
+﻿@model IEnumerable<PatientAppointment.Domain.Appointment>;
+
+<label class="form-label">Available Times</label>
+<div class="time-slot-grid">
+    @{
+        // C# logic to generate time slots from 8:00 AM to 10:30 PM
+        var startTime = TimeSpan.FromHours(8);
+        var endTime = TimeSpan.FromHours(22.5); // 10:30 PM
+        var interval = TimeSpan.FromMinutes(30);
+
+        for (var time = startTime; time <= endTime; time += interval)
+        {
+            var appointment = Model.FirstOrDefault(a => a.StartDateTime.TimeOfDay == time);
+
+			DateTime slotDateTime = DateTime.Parse(ViewData["SelectedDate"].ToString()).Add(time);
+
+
+                @if (appointment != null)
+                {
+                   <div class="time-slot booked" data-date-time="@slotDateTime">@time.ToString(@"hh\:mm")</div>
+                }
+                else
+                {
+                <div class="time-slot available" data-date-time="@slotDateTime">@time.ToString(@"hh\:mm")</div>
+                }
+        }
+    }
+
+    
+</div>

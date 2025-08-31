@@ -1,11 +1,13 @@
 ﻿@model List<PatientAppointment.Domain.Appointment>
 
+<form asp-action="Delete" id="antiForgeryForm" class="d-none"></form>
+
 <div class="card mt-4" id="appointmentResultsCard">
     <div class="card-body mt-4">
-        <h2 class="card-title mb-0"><i class="fas fa-calendar-alt me-2"></i>Appointments for: <span class="text-primary" id="selectedPatientName">@ViewBag.patient.FullName</span></h2>
+        <h2 class="card-title mb-0"><i class="fas fa-calendar-alt me-2"></i>Appointments for: <a asp-controller="Patients" asp-action="Details" asp-route-id="@ViewBag.patient.Id" style="text-decoration: none;">@ViewBag.patient.FullName</a></h2>
 
         <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-primary"><i class="fas fa-plus me-2"></i>Add New Appointment</button>
+            <a asp-controller="Appointments" asp-action="AddPatientAppointment" asp-route-pid="@ViewBag.patient.Id" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Add New Appointment</a>
         </div>
 
         <!-- List of existing appointments -->
@@ -14,7 +16,7 @@
         <ul class="list-group">
             @foreach (var appointment in Model)
             {
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+                <li class="list-group-item d-flex justify-content-between align-items-center" id="appointment-@appointment.Id">
                     <div>
                     <h6 class="mb-1">@appointment.AppointmentType</h6>
                     <p class="mb-1 text-muted">@appointment.StartDateTime</p>
@@ -31,12 +33,31 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createModalLabel">Delete Appointment</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close"></button>
+            </div>
+            <div class="modal-body" id="createModalBody">
+                Are you sure you want to delete appointment?
+            </div>
+            <div id="deleteArea" class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script>
+        let form = document.getElementById('antiForgeryForm');
+        let token = form.querySelector('input[name="__RequestVerificationToken"]').value;
         const appointmentResultsCard = document.getElementById('appointmentResultsCard')
         appointmentResultsCard.addEventListener('click', function(event){
-            event.preventDefault();
             const btn = event.target;
             const action = btn.dataset.action;
 
@@ -47,9 +68,45 @@
             }
             if (action === 'delete')
             {
+                const myModalElement = document.getElementById('createModal');
+                const modal = bootstrap.Modal.getOrCreateInstance(myModalElement);
+                modal.show();
                 const appointmentId = btn.dataset.appointmentId;
-                console.log(appointmentId);
-            }
-        })
+                const submitButton = document.getElementById('submitButton');
+                submitButton.addEventListener('click', function() {
+
+                fetch(`/Appointments/Delete/${appointmentId}`, {
+                method: 'POST',
+                headers: {
+
+                    'RequestVerificationToken': token
+                }
+                }).then(response => response.json()).then(data => {
+
+                     if(data.success) {
+                         const appointmentRow = document.getElementById(`appointment-${appointmentId}`);
+                          if (appointmentRow) {
+                                  appointmentRow.classList.add('fading-out');
+                                  setTimeout(() => {
+                                  appointmentRow.remove();
+                             }, 500);
+
+                          }
+
+                        const modalInstance = bootstrap.Modal.getInstance(myModalElement);
+                        modalInstance.hide();
+                        
+                        toastr.success(data.message, 'Success', { "closeButton": true, "progressBar": true, "timeOut": 5000 });
+
+                     }   
+
+                });
+               });
+
+            }    
+            });
     </script>
 }
+
+
+               

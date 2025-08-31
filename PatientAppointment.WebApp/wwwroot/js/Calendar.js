@@ -234,6 +234,9 @@ menu.addEventListener('click', function (event) {
         const modal = bootstrap.Modal.getOrCreateInstance(myModalElement);
         modal.show();
         const submitButton = document.getElementById('submitButton');
+        const closeButton = document.getElementById('close');
+        console.log(closeButton);
+        closeButton.addEventListener('click', () => document.getElementById("deleteArea").hidden = true);
         submitButton.addEventListener('click', function () {
             fetch(`/Appointments/Delete/${appointmentId}`, {
                 method: 'POST',
@@ -264,6 +267,7 @@ menu.addEventListener('click', function (event) {
                 }
             });
         });
+        
 
     }
 });
