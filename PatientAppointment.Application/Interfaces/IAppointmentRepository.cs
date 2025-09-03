@@ -15,6 +15,8 @@ namespace PatientAppointment.Application.Interfaces
         void Add(Appointment appointment);
         void Update(Appointment appointment);
         void Delete(int id);
+        public void UpdateFromForm(Appointment appointment);
+
 
         IEnumerable<Appointment> GetByPatientId(int pid);
         

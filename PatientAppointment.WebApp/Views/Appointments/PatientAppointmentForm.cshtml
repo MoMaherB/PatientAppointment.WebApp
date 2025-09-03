@@ -43,14 +43,16 @@
     </style>
 
 @model PatientAppointment.WebApp.Models.QuickAddViewModel
+@using PatientAppointment.Domain
 
         <div class="card">
 
             <div class="card-body">
-        <h2 class="mb-4">Create Appointment for: <a asp-controller="Patients" asp-action="Details" asp-route-id="@ViewBag.patient.Id" style="text-decoration: none;">@ViewBag.patient.FullName</a></h2>
+        <h2 class="mb-4">@ViewBag.actionTitle Appointment for: <a asp-controller="Patients" asp-action="Details" asp-route-id="@ViewBag.patient.Id" style="text-decoration: none;">@ViewBag.patient.FullName</a></h2>
 
-        <form asp-action="AddPatientAppointment">
+        <form asp-action="@ViewBag.action" data-action ="@ViewBag.action" id="edit-form">
                     <!-- Hidden field for the patient ID -->
+                    <input type="hidden" name="Id" value="@Model.Id" />
                     <input type="hidden" name="patientId" value="@ViewBag.patient.Id">
                     <input type="hidden" name="AppointmentType" value="NewPatient">
 			        <input type="hidden" name="StartDateTime">
@@ -64,7 +66,11 @@
                               <h5 class="mb-3">1. Select Date & Time</h5>
                               <br />
                             <label for="appointmentDate" class="form-label">Appointment Date</label>
-                            <input type="date" class="form-control" id="appointmentDate">
+                    <input type="date"
+                           class="form-control"
+                           id="appointmentDate"
+                           name="StartDateTime"
+                           value="@Model.StartDateTime.ToString("yyyy-MM-dd")" />
                     <div id="date-error">
                             @if (ViewData["ErrorMessage"] != null)
                     {
@@ -78,7 +84,7 @@
                         <div class="col-md-8 align-content-center" id="available-time">
                     <div class="card text-center" id="date-time-container">
                                 <div class="card-body">
-                            <h5 style="color: #d63384;">Choose date to find your appointment</h5>
+                                    <h5 style="color: #d63384;">Choose date to find your appointment</h5>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +98,7 @@
                         <div class="col-md-8">
                             <div class="row justify-content-end">
                                 <div class="col-md-4">
-                            <div class="card selection-card text-center active" value="NewPatient">
+                            <div class="card selection-card text-center  @(Model.AppointmentType == AppointmentType.NewPatient ? "active" : "")" value="NewPatient">
                                         <div class="card-body">
                                             <i class="fas fa-user-plus fa-2x mb-2 text-primary"></i>
                                             <p class="card-text fw-bold">New Patient</p>
@@ -100,7 +106,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                            <div class="card selection-card text-center" value="FollowUp">
+                            <div class="card selection-card text-center  @(Model.AppointmentType == AppointmentType.FollowUp ? "active" : "")" value="FollowUp">
                                         <div class="card-body">
                                             <i class="fas fa-notes-medical fa-2x mb-2 text-success"></i>
                                             <p class="card-text fw-bold">Follow-Up</p>
@@ -108,7 +114,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                            <div class="card selection-card text-center" value="Consultant">
+                            <div class="card selection-card text-center  @(Model.AppointmentType == AppointmentType.Consultant ? "active" : "")" value="Consultant">
                                         <div class="card-body">
                                             <i class="fas fa-user-md fa-2x mb-2 text-warning"></i>
                                             <p class="card-text fw-bold">Consultant</p>
@@ -135,6 +141,18 @@
 
 @section Scripts {
     <script>
+
+             document.addEventListener('DOMContentLoaded', function() {
+            // Get the initial date from the date picker (which we set in Step 1)
+            const initialDate = document.getElementById('appointmentDate');
+
+            // If the date picker has a value (i.e., we are in "Edit" mode)
+            if (initialDate.value) {
+                // Create and trigger a 'change' event to automatically load the time slots
+                initialDate.dispatchEvent(new Event('change'));
+            }
+        });
+
         const availableTimeSection = document.getElementById("available-time");
 		const appointmentDate = document.getElementById("appointmentDate");
         let chooenDate;
@@ -149,6 +167,7 @@
             }).then(response => response.text()).then(data => {
                 console.log(data);
                 availableTimeSection.innerHTML = data;
+
 			}).catch(error => console.error('Error fetching available slots:', error));
            
         });
@@ -188,9 +207,15 @@
             }
 		});
 
-        
 
-      
+
+
+        const form = document.getElementById('edit-form');
+        const action = form.dataset.action;
+        if (action === 'UpdatePatientAppointment'){
+            console.log('update logic here!')
+        }
+
         
     </script>
 

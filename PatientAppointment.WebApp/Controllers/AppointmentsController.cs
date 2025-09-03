@@ -3,7 +3,6 @@ using PatientAppointment.Application.Interfaces;
 using PatientAppointment.Domain;
 using PatientAppointment.WebApp.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
 
 namespace PatientAppointment.WebApp.Controllers
 {
@@ -184,7 +183,11 @@ namespace PatientAppointment.WebApp.Controllers
         {
             Patient patient = _patientRepository.GetByID(pid);
             ViewData["patient"] = patient;
-            return View("PatientAppointmentForm", new QuickAddViewModel()) ;
+            ViewData["action"] = "AddPatientAppointment";
+            QuickAddViewModel quickAddViewModel = new QuickAddViewModel();
+            quickAddViewModel.StartDateTime = DateTime.Today;
+            ViewData["actionTitle"] = "Create";
+            return View("PatientAppointmentForm", quickAddViewModel) ;
         }
 
         [HttpPost]
@@ -193,6 +196,10 @@ namespace PatientAppointment.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (quickAddViewModel.StartDateTime == DateTime.MinValue)
+                {
+                    ModelState.AddModelError("StartDateTime", "Please select a valid date and time for the appointment.");
+                }
                 Appointment appointment = new Appointment
                 {
                     PatientId = quickAddViewModel.PatientId,
@@ -207,9 +214,75 @@ namespace PatientAppointment.WebApp.Controllers
             }
             Patient patient = _patientRepository.GetByID(quickAddViewModel.PatientId);
             ViewData["patient"] = patient;
-            ViewData["ErrorMessage"] = "Please select an appointment date.";
+            TempData["error"] = "Please select a valid date and time for the appointment.";
+            quickAddViewModel.StartDateTime = DateTime.Today;
+            ViewData["action"] = "AddPatientAppointment";
+            ViewData["actionTitle"] = "Create";
+
             return View("PatientAppointmentForm", quickAddViewModel);
 
+        }
+
+        public IActionResult UpdatePatientAppointment(int id)
+        {
+            Appointment appointment = _appointmentRepository.GetById(id);
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+            Patient patient = _patientRepository.GetByID(appointment.PatientId);
+            QuickAddViewModel quickAddViewModel = new QuickAddViewModel
+            {
+                Id = id,
+                PatientId = appointment.PatientId,
+                AppointmentType = appointment.AppointmentType,
+                StartDateTime = appointment.StartDateTime,
+                AppointmentStatus = appointment.AppointmentStatus
+
+            };
+
+            ViewData["patient"] = patient;
+            ViewData["action"] = "UpdatePatientAppointment";
+            ViewData["actionTitle"] = "Update";
+
+            return View("PatientAppointmentForm", quickAddViewModel);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdatePatientAppointment(QuickAddViewModel quickAddViewModel)
+        {
+            if (quickAddViewModel.StartDateTime == DateTime.MinValue)
+            {
+                ModelState.AddModelError("StartDateTime", "Please select a valid date and time for the appointment.");
+                TempData["error"] = "Please select a valid date and time for the appointment.";
+
+            }
+
+            if (ModelState.IsValid)
+            {
+                Appointment appointment = new Appointment
+                {
+                    Id = quickAddViewModel.Id,
+                    PatientId = quickAddViewModel.PatientId,
+                    AppointmentType = quickAddViewModel.AppointmentType,
+                    StartDateTime = quickAddViewModel.StartDateTime,
+                    EndDateTime = quickAddViewModel.StartDateTime.AddMinutes(30),
+                    AppointmentStatus = quickAddViewModel.AppointmentStatus
+                };
+
+                _appointmentRepository.UpdateFromForm(appointment);
+
+                return RedirectToAction("PatientAppointments", new { pid = quickAddViewModel.PatientId });
+            }
+
+            Patient patient = _patientRepository.GetByID(quickAddViewModel.PatientId);
+            ViewBag.patient = patient;
+            ViewData["action"] = "UpdatePatientAppointment";
+            quickAddViewModel.StartDateTime = DateTime.Today;
+            ViewData["actionTitle"] = "Update";
+            return View("PatientAppointmentForm", quickAddViewModel);
         }
 
 

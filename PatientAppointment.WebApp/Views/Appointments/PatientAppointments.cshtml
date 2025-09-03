@@ -23,7 +23,7 @@
                             <span class="badge bg-@appointment.AppointmentStatus">@appointment.AppointmentStatus</span>
                 </div>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-outline-primary" data-action="edit" data-appointment-id="@appointment.Id"><i class="fas fa-edit" ></i> Edit</button>
+                            <a asp-action="UpdatePatientAppointment" asp-route-id="@appointment.Id" class="btn btn-sm btn-outline-primary" data-action="edit" data-appointment-id="@appointment.Id"><i class="fas fa-edit"></i> Edit</a>
                             <button class="btn btn-sm btn-outline-danger" data-action="delete" data-appointment-id="@appointment.Id"><i class="fas fa-trash"></i> Delete</button>
                 </div>
             </li>

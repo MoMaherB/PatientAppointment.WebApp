@@ -191,5 +191,33 @@ namespace PatientAppointment.Infrastructure
 
         }
 
+
+        // Add this complete new method to your AppointmentRepository class
+        public void UpdateFromForm(Appointment appointment)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string sql = @"UPDATE Appointments 
+                       SET PatientId = @PatientId, 
+                           StartDateTime = @StartDateTime, 
+                           EndDateTime = @EndDateTime, 
+                           AppointmentType = @AppointmentType, 
+                           AppointmentStatus = @AppointmentStatus 
+                       WHERE Id = @Id;";
+
+                SqlCommand command = new SqlCommand(sql, connection);
+
+                command.Parameters.AddWithValue("@Id", appointment.Id);
+                command.Parameters.AddWithValue("@PatientId", appointment.PatientId);
+                command.Parameters.AddWithValue("@StartDateTime", appointment.StartDateTime);
+                command.Parameters.AddWithValue("@EndDateTime", appointment.EndDateTime);
+                command.Parameters.AddWithValue("@AppointmentType", appointment.AppointmentType.ToString());
+                command.Parameters.AddWithValue("@AppointmentStatus", appointment.AppointmentStatus.ToString());
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
     }
 }
