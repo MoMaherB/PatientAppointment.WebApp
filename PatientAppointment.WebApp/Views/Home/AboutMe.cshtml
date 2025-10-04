@@ -1,0 +1,191 @@
+﻿@{
+    ViewData["Title"] = "About Mohamed Maher Bashandi";
+}
+
+<!-- Custom CSS for the page -->
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .profile-header {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://i.pinimg.com/1200x/db/71/11/db7111f5ed751edb3a5e6f6e69dfa227.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 4rem 2rem;
+        border-radius: 0.75rem;
+    }
+
+    .profile-picture {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 5px solid white;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        object-fit: cover;
+    }
+
+    .contact-links a {
+        color: white;
+        font-size: 1.5rem;
+        margin: 0 0.5rem;
+        transition: transform 0.2s;
+        display: inline-block;
+    }
+
+        .contact-links a:hover {
+            transform: scale(1.2);
+            color: #f8f9fa;
+        }
+
+    .section-card {
+        margin-top: 2rem;
+        border: none;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+        .section-card .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #D3378A;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+    .skill-badge {
+        background-color: #e9ecef;
+        color: #495057;
+        font-weight: 500;
+        margin: 0.25rem;
+        padding: 0.5em 0.9em;
+    }
+
+    .project-title, .cert-title {
+        color: #D3378A;
+        font-weight: bold;
+    }
+
+    .list-group-item i {
+        color: #D3378A;
+    }
+</style>
+
+<div class="container my-5">
+    <!-- Profile Header Section -->
+    <div class="profile-header text-center text-md-start">
+        <div class="row align-items-center">
+            <div class="col-md-3 text-center mb-4 mb-md-0">
+                <!-- Placeholder for your picture -->
+                <img src="~/img/my-photo.jpeg" alt="Mohamed Maher Bashandi" class="profile-picture">
+            </div>
+            <div class="col-md-9">
+                <h1 class="display-4">Mohamed Maher Bashandi</h1>
+                <p class="lead">Senior Biomedical Engineer & Software Developer</p>
+                <div class="contact-links mt-3">
+                    <a href="https://linkedin.com/in/MMaherB" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/MoMaherB" target="_blank" title="GitHub"><i class="fab fa-github-square"></i></a>
+                    <a href="mailto:Maher1525@gmail.com" title="Email"><i class="fas fa-envelope-square"></i></a><strong class="badge">Maher1525@gmail.com</strong>
+                    <a href="tel:+201066815565" title="+20-1066815565"><i class="fas fa-phone-square"></i></a><strong class="badge">+20-1066815565</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Career Objective Section -->
+    <div class="card section-card">
+        <div class="card-header">
+            <i class="fas fa-bullseye me-2"></i> Career Objective
+        </div>
+        <div class="card-body">
+            <p class="card-text">
+                Transitioning from 12 years in Biomedical Engineering to a programming career, supported by more than 2 years of hands-on software development experience through the ALX program. Skilled in problem-solving, critical thinking, and complex system analysis, with a passion for creating efficient, impactful solutions to real-world challenges.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <!-- Contact & Links Section -->
+            <div class="card section-card">
+                <div class="card-header">
+                    <i class="fas fa-address-book me-2"></i> Contact & Links
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><i class="fas fa-phone fa-fw me-3"></i>+20-1066815565</li>
+                    <li class="list-group-item"><i class="fas fa-envelope fa-fw me-3"></i>Maher1525@gmail.com</li>
+                    <li class="list-group-item"><i class="fas fa-map-marker-alt fa-fw me-3"></i>Faisal, Giza, Egypt</li>
+                    <li class="list-group-item"><i class="fab fa-linkedin fa-fw me-3"></i><a href="https://linkedin.com/in/MMaherB" target="_blank">linkedin.com/in/MMaherB</a></li>
+                    <li class="list-group-item"><i class="fab fa-github fa-fw me-3"></i><a href="https://github.com/MoMaherB" target="_blank">github.com/MoMaherB</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <!-- Certificates Section -->
+            <div class="card section-card">
+                <div class="card-header">
+                    <i class="fas fa-certificate me-2"></i> Certificates
+                </div>
+                <div class="card-body">
+                    <h5 class="cert-title">ALX Software Engineering Program</h5>
+                    <p class="card-text mb-2">Specialization in Back-end, Holberton School curriculum. (Dec 2023 - Feb 2025)</p>
+                    <hr>
+                    <h5 class="cert-title">Data Science in Precision Medicine</h5>
+                    <p class="card-text mb-0">Stanford Medicine – Department of Genetics.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technical Skills Section -->
+    <div class="card section-card">
+        <div class="card-header">
+            <i class="fas fa-cogs me-2"></i> Technical Skills
+        </div>
+        <div class="card-body">
+            <h5>Languages</h5>
+            <span class="badge skill-badge">C#</span>
+            <span class="badge skill-badge">Python</span>
+            <span class="badge skill-badge">C</span>
+            <span class="badge skill-badge">JavaScript</span>
+            <hr>
+            <h5>Backend & Frameworks</h5>
+            <span class="badge skill-badge">ASP.NET MVC</span>
+            <span class="badge skill-badge">Flask</span>
+            <span class="badge skill-badge">API Development</span>
+            <hr>
+            <h5>Databases</h5>
+            <span class="badge skill-badge">SQLAlchemy (ORM)</span>
+            <span class="badge skill-badge">MySQL</span>
+            <span class="badge skill-badge">SQLite</span>
+            <span class="badge skill-badge">ADO.NET</span>
+            <hr>
+            <h5>Frontend</h5>
+            <span class="badge skill-badge">HTML</span>
+            <span class="badge skill-badge">CSS</span>
+            <span class="badge skill-badge">Bootstrap</span>
+            <hr>
+            <h5>Tools</h5>
+            <span class="badge skill-badge">Git</span>
+            <span class="badge skill-badge">Shell Scripting</span>
+        </div>
+    </div>
+
+    <!-- Personal Projects Section -->
+    <div class="card section-card">
+        <div class="card-header">
+            <i class="fas fa-project-diagram me-2"></i> Personal Projects
+        </div>
+        <div class="card-body">
+            <h5 class="project-title">Patient Appointment WebApp (This Project)</h5>
+            <p>Developed a full-featured scheduling application with ASP.NET MVC and pure ADO.NET. Features a dynamic, server-side rendered calendar with Ajax-powered CRUD operations, role-based security, and a custom data access layer built on a professional multi-layer architecture.</p>
+            <hr>
+            <h5 class="project-title">Dynamic Medical Devices Application</h5>
+            <p>Developed a dynamic web application for managing medical devices with CRUD operations, compatible with any medical device company, using Flask, SQLAlchemy, Bootstrap, HTML, CSS, and implementing role-based access control.</p>
+            <hr>
+            <h5 class="project-title">Airbnb Clone</h5>
+            <p>Developed a console-based application using OOP principles to manage users, places, and amenities, implemented RESTful APIs with MySQL integration, and deployed static and dynamic web components.</p>
+        </div>
+    </div>
+</div>
+

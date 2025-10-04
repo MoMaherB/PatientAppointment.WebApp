@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientAppointment.WebApp", "PatientAppointment.WebApp\PatientAppointment.WebApp.csproj", "{035906D8-BD35-4DAE-BFC5-DFAFE8902B05}"
 EndProject
@@ -10,6 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientAppointment.Application", "PatientAppointment.Application\PatientAppointment.Application.csproj", "{9B3E09D6-3D04-4D39-9824-B532FEDEB94D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientAppointment.Infrastructure", "PatientAppointment.Infrastructure\PatientAppointment.Infrastructure.csproj", "{7101BFDE-BC42-4652-9577-68E9587754BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

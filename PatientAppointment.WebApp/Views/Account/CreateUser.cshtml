@@ -1,0 +1,42 @@
+﻿@model PatientAppointment.WebApp.Models.CreateUserViewModel
+
+@{
+    ViewData["Title"] = "Create New User";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-4">
+         
+            <div class="card-body">
+                <form asp-action="CreateUser" method="post">
+
+                    <h3 class="m-4">@ViewData["Title"]</h3>
+
+                    <!-- This div will display any general or field-specific errors -->
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label"></label>
+                        <input asp-for="Username" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                    </div>
+
+                    <div class="mt-4 d-flex justify-content-end gap-2">
+                        <a asp-action="UserManagement" class="btn btn-secondary">Back to List</a>
+                        <button type="submit" class="btn btn-primary">Create User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

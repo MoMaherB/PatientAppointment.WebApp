@@ -16,7 +16,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>@Html.DisplayNameFor(model => model.Id)</th>
                 <th>@Html.DisplayNameFor(model => model.FullName)</th>
                 <th>@Html.DisplayNameFor(model => model.Address)</th>
                 <th class="d-none d-lg-table-cell">@Html.DisplayNameFor(model => model.Phone)</th>
@@ -30,12 +29,11 @@
                     @foreach (var item in Model)
                     {
                     <tr id="patient-row-@item.Id">
-                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
                         <td>@Html.DisplayFor(modelItem => item.FullName)</td>
                         <td>@Html.DisplayFor(modelItem => item.Address)</td>
                         <td class="d-none d-lg-table-cell">@Html.DisplayFor(modelItem => item.Phone)</td>
                         <td class="d-none d-lg-table-cell">@Html.DisplayFor(modelItem => item.Gender)</td>
-                        <td class="d-none d-xl-table-cell">@Html.DisplayFor(modelItem => item.BirthDate)</td>
+                        <td class="d-none d-xl-table-cell"> @item.BirthDate.ToShortDateString()</td>
                         <td class="d-none d-xl-table-cell">@Html.DisplayFor(modelItem => item.Country)</td>
                         <td>
                             <div class="d-flex flex-wrap gap-2">
@@ -68,7 +66,6 @@
         <div id="patient-card-@item.Id" class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">@item.FullName</h5>
-                        <p class="card-text mb-1"><strong>ID:</strong> @item.Id</p>
                         <p class="card-text mb-1"><strong>Address:</strong> @item.Address</p>
                         <p class="card-text mb-1"><strong>Phone:</strong> @item.Phone</p>
                         <p class="card-text mb-1"><strong>Gender:</strong> @item.Gender</p>

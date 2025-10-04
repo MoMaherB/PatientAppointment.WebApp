@@ -7,8 +7,11 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/day-view.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/login-page.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PatientAppointment.WebApp.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css" />
+    <link href="~/lib/select2/css/select2.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/intl-tel-input/build/css/intlTelInput.css" rel="stylesheet" asp-append-version="true"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
 
@@ -25,14 +28,39 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Appointments" asp-action="FindPatients">Appointment Management</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Appointments" asp-action="FindPatients"><i class="fa-solid fa-magnifying-glass"></i> Find Patient</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Patients" asp-action="Index"><i class="fa-solid fa-user"></i> Patients</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Index">Calendar</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Index"><i class="fa-solid fa-calendar-days"></i> Calendar</a>
                         </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="UserManagement">
+                                    <i class="fas fa-users-cog me-1"></i> User Management
+                                </a>
+                            </li>
+                        }
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <!-- If the user IS logged in -->
+                            <li class="nav-item  badge bg-info">
+                                <span class="nav-link text-dark">Hello, @User.Identity.Name!</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <!-- If the user is NOT logged in -->
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -47,13 +75,19 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - PatientAppointment.WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.ToString("yyyy/MM") - Patient Appointment -
+            <a asp-area="" asp-controller="Home" asp-action="AboutMe">About Me</a>
         </div>
+
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/toastr.js/toastr.min.js"></script>
+    <script src="~/lib/select2/js/select2.min.js"></script>
+    <script src="~/lib/intl-tel-input/build/js/intlTelInput.min.js"></script>
+    <script src="~/lib/intl-tel-input/build/js/intlTelInputWithUtils.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

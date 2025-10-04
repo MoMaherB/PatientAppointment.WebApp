@@ -18,7 +18,7 @@ namespace PatientAppointment.WebApp.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult AboutMe()
         {
             return View();
         }

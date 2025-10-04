@@ -18,6 +18,7 @@ namespace PatientAppointment.WebApp.Models
         public string Gender { get; set; }
         [Required]
         [Display(Name = "Birth Date")]
+        [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
         [Required]
         public string Country { get; set; }

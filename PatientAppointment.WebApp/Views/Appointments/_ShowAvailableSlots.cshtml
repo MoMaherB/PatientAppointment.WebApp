@@ -17,11 +17,11 @@
 
                 @if (appointment != null)
                 {
-                   <div class="time-slot booked" data-date-time="@slotDateTime">@time.ToString(@"hh\:mm")</div>
+                <div class="time-slot booked" data-date-time="@slotDateTime.ToString("o")">@time.ToString(@"hh\:mm")</div>
                 }
                 else
                 {
-                <div class="time-slot available" data-date-time="@slotDateTime">@time.ToString(@"hh\:mm")</div>
+                <div class="time-slot available" data-date-time="@slotDateTime.ToString("o")">@time.ToString(@"hh\:mm")</div>
                 }
         }
     }

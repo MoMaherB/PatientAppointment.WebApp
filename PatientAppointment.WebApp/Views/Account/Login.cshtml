@@ -1,0 +1,36 @@
+﻿@model PatientAppointment.WebApp.Models.LoginViewModel
+                    <div class="card login-card">
+                        <div class="row g-0">
+                            <!-- Left Section: Image -->
+                            <div class="col-md-6 d-none d-md-block login-image-section">
+                                <!-- The background image is set via CSS -->
+                            </div>
+
+                            <!-- Right Section: Form -->
+                            <div class="col-md-6 login-form-section">
+                                <div class="text-center mb-4">
+                                    <i class="fas fa-calendar-check fa-3x" style="color: #D3378A;"></i>
+                                    <h3 class="mt-2">Welcome Back</h3>
+                                    <p class="text-muted">Sign in to manage your appointments.</p>
+                                </div>
+
+                            <form asp-action="Login">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="Username" class="form-control" placeholder="name@example.com">
+                                        <label for="floatingInput">Email address</label>
+                                       <span asp-validation-for="Username" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="Password" type="password" class="form-control" placeholder="Password">
+                                        <label for="floatingPassword">Password</label>
+                                         <span asp-validation-for="Password" class="text-danger"></span>
+
+                                    </div>
+
+                                    <button type="submit" class="btn btn-login w-100">Sign in</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>

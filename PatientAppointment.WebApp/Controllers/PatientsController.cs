@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using PatientAppointment.Application.Interfaces;
@@ -7,6 +8,7 @@ using PatientAppointment.WebApp.Models;
 
 namespace PatientAppointment.WebApp.Controllers
 {
+    [Authorize]
     public class PatientsController : Controller
     {
         private readonly IPatientRepository _patientRepository;
@@ -25,6 +27,12 @@ namespace PatientAppointment.WebApp.Controllers
             ViewData["Title"] = "Create New Patient";
             ViewData["btn"] = "Create";
             ViewData["Action"] = "Create";
+            var countries = ISO3166.Country.List.Select(c => new SelectListItem
+            {
+                Value = c.Name,
+                Text = c.Name
+            }).ToList();
+            ViewBag.Countries = countries;
             return View("PatientForm");
         }
 
@@ -60,6 +68,12 @@ namespace PatientAppointment.WebApp.Controllers
             ViewData["Title"] = "Create New Patient";
             ViewData["btn"] = "Create";
             ViewData["Action"] = "Create";
+            var countries = ISO3166.Country.List.Select(c => new SelectListItem
+            {
+                Value = c.Name,
+                Text = c.Name
+            }).ToList();
+            ViewBag.Countries = countries;
             return View("PatientForm", patientViewModel);
 
         }

@@ -26,12 +26,6 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input asp-for="Phone" class="form-control" placeholder="Phone" />
-                        <label asp-for="Phone"></label>
-                        <span asp-validation-for="Phone" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-floating mb-3">
                         <select asp-for="Gender" class="form-control">
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -47,9 +41,19 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input asp-for="Country" class="form-control" placeholder="Country" />
-                        <label asp-for="Country"></label>
+                        <select asp-for="Country" class="form-control" id="Country">
+                            <option value="">-- Select Country --</option>
+                            @foreach (var country in ViewBag.Countries)
+                            {
+                                <option value="@country.Value">@country.Text</option>
+                            }
+                        </select>
                         <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Phone" class="form-control" placeholder="Phone" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
                     </div>
 
                     <div class="form-group mb-3 mt-3">
@@ -66,5 +70,26 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script>
+            $(document).ready(function () {
+                $('#Country').select2();
+
+            var input = document.querySelector("#Phone");
+            var iti = window.intlTelInput(input, {
+                initialCountry: "eg",
+                nationalMode: false,
+                separateDialCode: false
+            });
+
+            $("form").on("submit", function () {
+                if (iti) {
+                    var fullNumber = iti.getNumber();
+                     console.log(fullNumber);
+                    input.value = fullNumber;
+                }
+            });
+            });
+        </script>
+
     }
 }

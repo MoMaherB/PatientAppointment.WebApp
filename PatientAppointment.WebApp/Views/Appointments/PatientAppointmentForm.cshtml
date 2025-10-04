@@ -55,7 +55,7 @@
                     <input type="hidden" name="Id" value="@Model.Id" />
                     <input type="hidden" name="patientId" value="@ViewBag.patient.Id">
                     <input type="hidden" name="AppointmentType" value="NewPatient">
-			        <input type="hidden" name="StartDateTime">
+            <input type="hidden" name="StartDateTime" value="@Model.StartDateTime.ToString("o")" id="date-time-to-update">
 			        <input type="hidden" name="AppointmentStatus" value="Scheduled">
 
                     
@@ -165,8 +165,16 @@
             fetch(`/Appointments/ShowAvailableSlots/?date=${chooenDate}`, {
                 method: 'GET'
             }).then(response => response.text()).then(data => {
-                console.log(data);
+                // console.log(data);
                 availableTimeSection.innerHTML = data;
+                  if (action === 'UpdatePatientAppointment'){
+            const dateTime = document.getElementById('date-time-to-update');
+            console.log(dateTime.value);
+            const selectedCard = document.querySelector(`[data-date-time="${dateTime.value}"]`);
+            console.log(selectedCard);
+            selectedCard.classList.add('selected');
+             selectedCard.classList.remove('booked');
+        }
 
 			}).catch(error => console.error('Error fetching available slots:', error));
            
@@ -201,7 +209,6 @@
                 appointmentCard.classList.add('active');
 
                 const selectedAppointmentType = appointmentCard.getAttribute('value');
-                console.log(selectedAppointmentType);
 				document.querySelector('input[name="AppointmentType"]').value = selectedAppointmentType;
 
             }
@@ -213,7 +220,10 @@
         const form = document.getElementById('edit-form');
         const action = form.dataset.action;
         if (action === 'UpdatePatientAppointment'){
-            console.log('update logic here!')
+            const dateTime = document.getElementById('date-time-to-update');
+            console.log(dateTime.value);
+            const selectedCard = document.querySelector(`[data-date-time="${dateTime.value}"]`);
+            console.log(selectedCard);
         }
 
         

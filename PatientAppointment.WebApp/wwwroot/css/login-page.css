@@ -1,0 +1,48 @@
+﻿.main-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #fceef5; /* A very light pink background */
+}
+
+.login-card {
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Ensures the image corners are rounded */
+}
+
+.login-image-section {
+    /* Updated placeholder image with the new color scheme */
+    background: url('https://i.pinimg.com/1200x/8c/f3/db/8cf3db5b7b1b9819c4f2d1c9e50849b1.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+.login-form-section {
+    padding: 7rem 3rem;
+}
+
+/* Use your project's pink for the button */
+.btn-login {
+    background-color: #D3378A;
+    border-color: #D3378A;
+    color: white;
+    font-weight: bold;
+    padding: 0.75rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+    .btn-login:hover {
+        background-color: #b82e77; /* A darker pink for hover */
+        border-color: #b82e77;
+    }
+
+.form-control:focus {
+    border-color: #D3378A;
+    box-shadow: 0 0 0 0.25rem rgba(211, 55, 138, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: #D3378A;
+    border-color: #D3378A;
+}

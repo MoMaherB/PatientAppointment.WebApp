@@ -2,7 +2,56 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    /* This is the main style for the full-width hero banner */
+    .hero-banner {
+        width: 100%;
+        min-height: 60vh; /* Makes the banner 60% of the browser's height */
+        /* Sets the background image and adds a dark overlay for text readability */
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('http://i.pinimg.com/1200x/db/71/11/db7111f5ed751edb3a5e6f6e69dfa227.jpg');
+        background-size: cover;
+        background-position: center;
+        /* Uses Flexbox to perfectly center the content vertically and horizontally */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white; /* Makes all text inside white */
+    }
+
+    /* Your existing login button style */
+    .btn-custom-login {
+        background-color: #D3378A;
+        border-color: #D3378A;
+        color: white;
+        font-weight: bold;
+        padding: 0.75rem 1.5rem;
+        font-size: 1.1rem;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .btn-custom-login:hover {
+            background-color: #b82e77;
+            border-color: #b82e77;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+</style>
+
+<!-- The hero banner is placed outside the main container to make it full-width -->
+<div class="hero-banner">
+    <div>
+        <!-- Main Welcome Message -->
+        <h1 class="display-4 fw-bold">Welcome to the Patient Appointment System</h1>
+
+        <!-- Subtitle -->
+        <p class="lead my-4">Efficiently manage your clinic's schedule and patient information.</p>
+
+         @if (!User.Identity.IsAuthenticated)
+                        {
+        <a asp-controller="Account" asp-action="Login" class="btn btn-custom-login">
+            <i class="fas fa-sign-in-alt me-2"></i> Login to Get Started
+        </a>
+                        }
+     </div>
 </div>

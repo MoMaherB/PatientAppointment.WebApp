@@ -3,9 +3,11 @@ using PatientAppointment.Application.Interfaces;
 using PatientAppointment.Domain;
 using PatientAppointment.WebApp.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PatientAppointment.WebApp.Controllers
 {
+    [Authorize]
     public class AppointmentsController : Controller
     {
         private readonly IAppointmentRepository _appointmentRepository;
